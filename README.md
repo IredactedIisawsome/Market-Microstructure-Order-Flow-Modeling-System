@@ -1,127 +1,59 @@
 # Market-Microstructure-Order-Flow-Modeling-System
 
-# **Overview**
+This repository is an interview-facing showcase of a market microstructure research and engineering stack. It highlights the pipeline, modeling philosophy, and evaluation mindset used for short-horizon order flow problems. Production strategy logic, parameters, and proprietary data are intentionally omitted; a toy, fully runnable demo is provided to illustrate the workflow.
 
-This project is a market microstructure research and engineering system focused on processing high frequency trade and Level 2 order book data to study short horizon order flow dynamics. The system emphasizes data quality, non stationarity, and realistic evaluation rather than point prediction alone.
+## What’s included (showcase)
+- End-to-end pipeline skeleton: ingestion → filtration → feature extraction → regime-aware labeling → model training/eval.
+- Order book and trade feature engineering utilities designed for high-frequency, non-stationary data.
+- Toy synthetic demo (`scripts/run_toy_showcase.py`) that generates mock order book/trade data, builds features/labels, fits a lightweight model, and reports metrics—safe to run anywhere.
+- Documentation to guide interview walk-throughs and conversations about design trade-offs.
 
-The goal of this repository is to demonstrate system design, modeling philosophy, and evaluation techniques used when working with noisy, adversarial data. Strategy specific logic and parameters are intentionally omitted.
+## What’s intentionally omitted or redacted
+- Real market data, execution infrastructure, feature inventories, and regime definitions.
+- Sweep-cost logic, trading thresholds, and production backtesting stack (maintained privately).
+- Any code or parameters that would make this directly deployable as a trading strategy.
 
-The full implementation is maintained in a private repository and is available to recruiters upon request.
+## Quickstart (toy demo)
+1. Clone or download this repository, then open a terminal in its root (`.../Market-Microstructure-Order-Flow-Modeling-System`).
+2. Install Python 3.10+: `python --version`
+3. Install deps: `pip install -r requirements.txt`
+4. Run the demo: `python scripts/run_toy_showcase.py`
+5. Use the printed metrics to explain how the production system is evaluated without exposing real logic.
 
-# **System Architecture**
+## System architecture (conceptual)
+- High-frequency trade and Level 2 order book ingestion.
+- Filtration layer to remove microstructure noise and low-information events.
+- Feature extraction from depth and order flow dynamics.
+- Regime segmentation to handle non-stationarity.
+- Distributional/quantile modeling for asymmetric decision-making.
+- Backtesting and evaluation under execution constraints.
+- Each stage is modular, testable, and configuration-driven.
 
--The system is structured as an end to end pipeline:
+## Data sources (showcase edition)
+- Trade prints and Level 2 depth across multiple price levels (structure only).
+- No live or historical market data is included here.
+- Depth is modeled to capture liquidity distribution, imbalance, and sweep cost; concrete rules are withheld.
 
--High frequency trade and Level 2 order book ingestion
+## Filtration layer
+- Removes or downweights stale quotes, crossed/locked markets, mechanical bursts, and low-information events.
+- Critical for signal-to-noise improvement; exact rules are redacted in this public version.
 
--Filtration layer to remove microstructure noise and low information events
+## Level 2 order book modeling
+- Models liquidity across depth levels to measure shape/imbalance and estimate sweep cost and liquidity consumption.
+- Depth-based feature implementations are abstracted; interfaces remain for discussion.
 
--Feature extraction from depth and order flow dynamics
+## Regime segmentation
+- Accounts for non-stationarity via liquidity/volatility-aware regimes.
+- Metrics are analyzed globally and per regime to avoid overstating performance; regime boundaries are omitted.
 
--Regime segmentation to handle non stationarity
+## Distributional modeling
+- Uses quantile/distributional approaches instead of point forecasts to support risk-aware decisions.
+- Model internals are withheld; the toy demo uses a lightweight classifier for illustration only.
 
--Distributional modeling using quantile based approaches
+## Evaluation and backtesting
+- Evaluated with macro F1, expected value distributions, drawdown analysis, and regime-conditioned metrics.
+- Backtesting assumptions and execution logic are private; the toy demo focuses on structure, not live PnL claims.
 
--Backtesting and evaluation under execution constraints
-
--Each stage is designed to be modular, testable, and configurable.
-
-# **Data Sources**
-
--The system operates on:
-
-  -Trade prints
-
-  -Level 2 bid and ask depth across multiple price levels
-
-  -Level 2 depth is used to model liquidity distribution, depth imbalance, and potential execution impact rather than relying only on top of book information.
-
-  -No real market data is included in this public repository.
-
-  -Filtration Layer
-
-  -Raw market data contains significant structural noise. A dedicated filtration layer is applied before any feature generation or modeling.
-
-The filtration process removes or downweights:
-
-  -Stale quotes
-
-  -Crossed or locked markets
-
-  -Mechanically induced bursts of low information activity
-
-  -Events unlikely to contribute to meaningful short horizon signal
-
-  -This layer is critical for improving signal to noise ratio and ensuring downstream models are trained on consistent inputs.
-
-  -Exact filtration rules are not disclosed in this public version.
-
-# **Level 2 Order Book Modeling**
-
-Rather than treating the order book as a single price and size, the system models liquidity across multiple depth levels.
-
-This enables:
-
-  -Measurement of depth shape and imbalance
-
-  -Estimation of sweep cost and liquidity consumption
-
-  -Analysis of how depth distribution influences short horizon price behavior
-
-  -All depth based features are abstracted in this repository.
-
-# **Regime Segmentation**
-
-  -Market behavior is non stationary. To address this, the system segments data into regimes based on market conditions such as liquidity and volatility.
-
-  -Models and evaluation metrics are analyzed both globally and within regimes to avoid overestimating performance in favorable conditions.
-
-  -Specific regime definitions and boundaries are omitted.
-
-# **Distributional Modeling**
-
-  -Instead of predicting a single outcome, the system uses quantile based modeling to estimate conditional return distributions.
-
-This approach supports:
-
-  -Asymmetric decision making
-
-  -Risk aware thresholding
-
-  -More informative evaluation than point forecasts
-
-  -Quantile regression is used as a core modeling tool, though model internals are not included here.
-
-# **Evaluation and Backtesting**
-
-Model performance is evaluated using:
-
-  -Macro F1 for classification balance
-
-  -Expected value distributions
-
-  -Drawdown analysis
-
-  -Regime conditioned metrics
-
-  -Backtesting incorporates realistic execution assumptions and estimated sweep costs to avoid optimistic bias.
-
-  -No live or historical performance results are published in this repository.
-
-# **Reproducibility and Tooling**
-
--Python based implementation
-
--Modular project structure
-
--Configuration driven experiments
-
--Git based version control and CLI workflows
-
--Dependencies and example configuration files are included for structural reference only.
-
-# **Access Note**
-
--This public repository is a structural and conceptual showcase.
-
--The full implementation, including feature logic, regime definitions, sweep cost models, and trained artifacts, is maintained in a private repository and can be shared with recruiters or interviewers upon request.
+## Access note
+- This public repo is a structural and conceptual showcase only.
+- The full implementation (feature logic, regime definitions, sweep cost models, and trained artifacts) is maintained in a private repository and can be shared with recruiters or interviewers upon request.
