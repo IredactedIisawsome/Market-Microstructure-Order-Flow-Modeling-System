@@ -1,6 +1,6 @@
 # Market-Microstructure-Order-Flow-Modeling-System
-Market Microstructure & Order Flow Modeling System
-Overview
+
+##**Overview**
 
 This project is a market microstructure research and engineering system focused on processing high frequency trade and Level 2 order book data to study short horizon order flow dynamics. The system emphasizes data quality, non stationarity, and realistic evaluation rather than point prediction alone.
 
@@ -8,7 +8,7 @@ The goal of this repository is to demonstrate system design, modeling philosophy
 
 The full implementation is maintained in a private repository and is available to recruiters upon request.
 
-System Architecture
+##**System Architecture**
 
 The system is structured as an end to end pipeline:
 
@@ -26,7 +26,7 @@ Backtesting and evaluation under execution constraints
 
 Each stage is designed to be modular, testable, and configurable.
 
-Data Sources
+##**Data Sources**
 
 The system operates on:
 
@@ -56,7 +56,7 @@ This layer is critical for improving signal to noise ratio and ensuring downstre
 
 Exact filtration rules are not disclosed in this public version.
 
-Level 2 Order Book Modeling
+##**Level 2 Order Book Modeling**
 
 Rather than treating the order book as a single price and size, the system models liquidity across multiple depth levels.
 
@@ -70,7 +70,7 @@ Analysis of how depth distribution influences short horizon price behavior
 
 All depth based features are abstracted in this repository.
 
-Regime Segmentation
+##**Regime Segmentation**
 
 Market behavior is non stationary. To address this, the system segments data into regimes based on market conditions such as liquidity and volatility.
 
@@ -78,7 +78,7 @@ Models and evaluation metrics are analyzed both globally and within regimes to a
 
 Specific regime definitions and boundaries are omitted.
 
-Distributional Modeling
+##**Distributional Modeling**
 
 Instead of predicting a single outcome, the system uses quantile based modeling to estimate conditional return distributions.
 
@@ -92,7 +92,7 @@ More informative evaluation than point forecasts
 
 Quantile regression is used as a core modeling tool, though model internals are not included here.
 
-Evaluation and Backtesting
+##**Evaluation and Backtesting**
 
 Model performance is evaluated using:
 
@@ -108,7 +108,7 @@ Backtesting incorporates realistic execution assumptions and estimated sweep cos
 
 No live or historical performance results are published in this repository.
 
-Reproducibility and Tooling
+##**Reproducibility and Tooling**
 
 Python based implementation
 
@@ -120,7 +120,7 @@ Git based version control and CLI workflows
 
 Dependencies and example configuration files are included for structural reference only.
 
-Access Note
+##**Access Note**
 
 This public repository is a structural and conceptual showcase.
 
